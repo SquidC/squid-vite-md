@@ -12,28 +12,11 @@ const viteConfig: UserConfig = {
   alias: {
     "/@/": pathResolve("."),
   },
-  cssPreprocessOptions: {
-    less: {
-      modifyVars: {
-        hack: `true; @import "${join(
-          __dirname,
-          "./styles/index.less",
-        )}";`,
-      },
-      javascriptEnabled: true,
-    },
-  },
   plugins: [
-    // mdLoader({
-    //   prism: {
-    //     theme: "okaidia",
-    //   },
-    // }),
     vueMd(),
-    // viteMd(),
   ],
   optimizeDeps: {
-    include: ["lodash", "element-plus"],
+    include: ["fs-extra"],
   },
 }
 

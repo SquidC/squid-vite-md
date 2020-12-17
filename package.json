@@ -1,6 +1,6 @@
 {
   "name": "@squidc/vite-md",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "description": "vite插件 markdown解析器",
   "main": "dist/index.js",
   "files": [
@@ -15,25 +15,26 @@
   },
   "homepage": "https://github.com/SquidC/squid-vite-md/blob/master/README.md",
   "scripts": {
-    "dev": "tsc -w .",
-    "build": "tsc -p ."
+    "wbuild": "tsc -w .",
+    "build": "tsc -p .",
+    "dev": "cd example && vite"
   },
   "author": "Ming07",
   "license": "ISC",
   "dependencies": {
+    "@types/fs-extra": "^9.0.5",
+    "@types/markdown-it": "^12.0.0",
+    "@types/markdown-it-container": "^2.0.3",
+    "@vue/compiler-sfc": "^3.0.4",
     "fs-extra": "^9.0.1",
     "markdown-it": "^12.0.3",
     "markdown-it-container": "^3.0.0",
-    "@vue/compiler-sfc": "^3.0.4"
+    "vite": "^1.0.0-rc.13"
   },
   "peerDependencies": {
     "vite": ">=1.0.0-rc.13"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.5",
-    "@types/markdown-it": "^12.0.0",
-    "@types/markdown-it-container": "^2.0.3",
-    "typescript": "^3.9.2",
-    "vite": "^1.0.0-rc.13"
+    "typescript": "^3.9.2"
   }
 }
