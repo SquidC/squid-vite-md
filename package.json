@@ -17,7 +17,7 @@
   "scripts": {
     "wbuild": "tsc -w .",
     "build": "tsc -p .",
-    "dev": "cd example && vite"
+    "dev": "cd example && yarn dev"
   },
   "author": "Ming07",
   "license": "ISC",
