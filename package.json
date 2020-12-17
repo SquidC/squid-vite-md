@@ -1,5 +1,5 @@
 {
-  "name": "@squid/vite-md",
+  "name": "@squidc/vite-md",
   "version": "0.5.3",
   "description": "vite插件 markdown解析器",
   "main": "dist/index.js",
