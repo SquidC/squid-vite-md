@@ -3,13 +3,15 @@
     "outDir": "dist",
     "baseUrl": ".",
     "module": "commonjs",
+    "moduleResolution": "node",
     "declaration": true,
     "removeComments": true,
-    "moduleResolution": "node",
     "esModuleInterop": true,
+    "sourceMap": true,
+    "strict": true,
+    "noUnusedLocals": true,
     "jsx": "preserve",
     "target": "es2019",
-    "sourceMap": false,
     "lib": [
       "ESNext", "DOM"
     ],

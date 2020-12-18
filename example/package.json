@@ -1,15 +1,10 @@
 {
-  "name": "example",
-  "version": "1.0.0",
-  "description": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vite"
   },
-  "license": "ISC",
   "devDependencies": {
     "@squidc/vite-md": "file:../dist",
-    "vite": "^1.0.0-rc.13",
-    "vue": "^3.0.4"
+    "vite": "link:../node_modules/vite",
+    "vue": "link:../node_modules/vite"
   }
 }
