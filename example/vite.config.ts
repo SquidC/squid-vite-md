@@ -1,6 +1,6 @@
 import { UserConfig } from "vite"
 import { resolve, join } from "path"
-import vueMd from "../dist"
+import vueMd from "@squidc/vite-md"
 
 function pathResolve(dir: string) {
   return resolve(__dirname, ".", dir)

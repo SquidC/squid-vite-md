@@ -2,16 +2,14 @@
   "compilerOptions": {
     "outDir": "dist",
     "baseUrl": ".",
-    "module": "ESNext",
+    "module": "commonjs",
     "declaration": true,
-    "noImplicitAny": false,
     "removeComments": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
     "jsx": "preserve",
-    "noLib": false,
-    "target": "es6",
-    "sourceMap": true,
+    "target": "es2019",
+    "sourceMap": false,
     "lib": [
       "ESNext", "DOM"
     ],
