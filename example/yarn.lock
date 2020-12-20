@@ -746,9 +746,9 @@ es-module-lexer@^0.3.25:
   integrity sha1-e1BwROl9WwOwHUOSx0/+ucF3qDs=
 
 esbuild@^0.8.12:
-  version "0.8.21"
-  resolved "https://registry.npm.taobao.org/esbuild/download/esbuild-0.8.21.tgz#c431f8af457795c2fecb1b2873cb8eaef4e5b53c"
-  integrity sha1-xDH4r0V3lcL+yxsoc8uOrvTltTw=
+  version "0.8.25"
+  resolved "https://registry.npm.taobao.org/esbuild/download/esbuild-0.8.25.tgz#1e58747d147a9a2d03d48165f01d8e8d637e9437"
+  integrity sha1-Hlh0fRR6mi0D1IFl8B2OjWN+lDc=
 
 escape-html@^1.0.3:
   version "1.0.3"
@@ -813,9 +813,9 @@ fast-glob@^3.1.1:
     picomatch "^2.2.1"
 
 fastq@^1.6.0:
-  version "1.9.0"
-  resolved "https://registry.npm.taobao.org/fastq/download/fastq-1.9.0.tgz#e16a72f338eaca48e91b5c23593bcc2ef66b7947"
-  integrity sha1-4Wpy8zjqykjpG1wjWTvMLvZreUc=
+  version "1.10.0"
+  resolved "https://registry.npm.taobao.org/fastq/download/fastq-1.10.0.tgz?cache=0&sync_timestamp=1608463072522&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ffastq%2Fdownload%2Ffastq-1.10.0.tgz#74dbefccade964932cdf500473ef302719c652bb"
+  integrity sha1-dNvvzK3pZJMs31AEc+8wJxnGUrs=
   dependencies:
     reusify "^1.0.4"
 

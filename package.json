@@ -21,6 +21,11 @@
   },
   "author": "Ming07",
   "license": "ISC",
+  "lint-staged": {
+    "**/*.{js,ts,tsx,jsx}": [
+      "eslint --fix --ext .js,.jsx"
+    ]
+  },
   "dependencies": {
     "@types/fs-extra": "^9.0.5",
     "@types/markdown-it": "^12.0.0",
@@ -36,6 +41,15 @@
     "vite": ">=1.0.0-rc.13"
   },
   "devDependencies": {
-    "typescript": "^3.9.2"
+    "@types/typescript": "^2.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.6.1",
+    "@typescript-eslint/parser": "^4.6.1",
+    "typescript": "^4.1.2",
+    "eslint": "^7.12.1",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-vue": "^7.1.0",
+    "lint-staged": "^10.5.1"
   }
 }

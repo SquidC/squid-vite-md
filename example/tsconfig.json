@@ -1,7 +1,52 @@
 {
-  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "strictFunctionTypes": false,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "experimentalDecorators": true,
+    "incremental": true,
+    "skipLibCheck": true,
+    "importHelpers": true,
+    "sourceMap": true,
+    "noLib": false,
+    "declaration": true,
+    "noImplicitAny": false,
+    "types": [
+      "node"
+    ],
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable",
+      "scripthost"
+    ],
+    "paths": {
+      // 为了适配vite的alias,故采用/@/* , 而不用 @/*
+      "/@/*": [
+          "src/*"
+      ]
+    }
+  },
   "include": [
-    "typings",
-    "."
+      ".",
+      "./**/*.d.ts",
+      "./**/*.ts",
+      "./**/*.tsx",
+      "./**/*.vue"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.js"
   ]
 }

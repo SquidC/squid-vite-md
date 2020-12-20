@@ -10,11 +10,21 @@
       <slot name="source"></slot>
     </div>
     <!-- 源码区 -->
-    <div ref="meta" class="meta">
-      <div v-if="$slots.default" ref="description" class="description">
+    <div
+      ref="meta"
+      class="meta"
+    >
+      <div
+        v-if="$slots.default"
+        ref="description"
+        class="description"
+      >
         <slot></slot>
       </div>
-      <div ref="highlight" class="highlight">
+      <div
+        ref="highlight"
+        class="highlight"
+      >
         <slot name="highlight"></slot>
       </div>
     </div>
@@ -44,6 +54,7 @@ import {
   onMounted,
 } from "vue";
 import useRefTemplate from "../hooks/useRefTemplate";
+
 export default defineComponent({
   name: "DemoBlock",
   setup() {
@@ -70,8 +81,8 @@ export default defineComponent({
     });
     const codeAreaHeight = computed(() => {
       if (state.isMounted && state.isExpanded) {
-           const el = useRefTemplate<HTMLElement>(highlight);
-           const height = el.clientHeight + 20
+        const el = useRefTemplate<HTMLElement>(highlight);
+        const height = el.clientHeight + 20
         return height+"px";
       } else {
         return "1px";

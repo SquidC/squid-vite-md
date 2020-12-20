@@ -8,7 +8,7 @@ import { addFenceRule } from "./fence"
 // 高亮html代码
 const handleHighlight = (str: string, lang: string) => {
   if (!lang || !getLanguage(lang)) {
-    return '<pre><code class="hljs">' + str + '</code></pre>'
+    return '<pre><code class="hljs">' + str + "</code></pre>"
   }
   const html = highlight(lang, str, true, undefined).value
   return `<pre><code class="hljs language-${lang}">${html}</code></pre>`

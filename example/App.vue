@@ -12,6 +12,8 @@ export default defineComponent({
   name: "App",
   components: {
     testMD,
+  },
+  setup(){
   }
 })
 </script>
