@@ -20,8 +20,10 @@
   },
   "exclude": [
     "node_modules",
-    "**/*.d.ts"
   ],
-  "include": [ "src" ]
- }
+  "include": [ 
+    "src",
+    "**/*.d.ts"
+  ]
+}
  
