@@ -1,9 +1,24 @@
 import MarkdownIt from "markdown-it"
 import MarkdownItContainer from "markdown-it-container"
+import {highlight, getLanguage} from "highlight.js"
 import Token from "markdown-it/lib/token"
 import { addFenceRule } from "./fence"
 
-const md =  new MarkdownIt({})
+
+// 高亮html代码
+const handleHighlight = (str: string, lang: string) => {
+  if (!lang || !getLanguage(lang)) {
+    return '<pre><code class="hljs">' + str + '</code></pre>'
+  }
+  const html = highlight(lang, str, true, undefined).value
+  return `<pre><code class="hljs language-${lang}">${html}</code></pre>`
+}
+
+const md =  new MarkdownIt({
+  html: true,
+  highlight: handleHighlight
+})
+
 // 使用md插件,让md支持 :::demo 这样的语法
 md.use(MarkdownItContainer, "demo", {
   validate(params: string) {
@@ -22,7 +37,8 @@ md.use(MarkdownItContainer, "demo", {
     return "</demo-block>"
   },
 })
-
+md.use(MarkdownItContainer, "tip");
+md.use(MarkdownItContainer, "warning");
 addFenceRule(md)
 
 export default md
