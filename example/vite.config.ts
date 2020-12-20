@@ -1,5 +1,5 @@
 import { UserConfig } from "vite"
-import { resolve, join } from "path"
+import { resolve } from "path"
 import vueMd from "../src"
 
 function pathResolve(dir: string) {
@@ -14,7 +14,7 @@ const viteConfig: UserConfig = {
     vueMd(),
   ],
   optimizeDeps: {
-    include: ["lodash", "element-plus"],
+    include: ["element-plus"],
   },
 }
 

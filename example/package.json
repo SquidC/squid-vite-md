@@ -1,10 +1,11 @@
 {
+  "license": "ISC",
   "scripts": {
     "dev": "vite"
   },
   "devDependencies": {
     "@squidc/vite-md": "file:../dist",
     "vite": "link:../node_modules/vite",
-    "vue": "link:../node_modules/vite"
+    "vue": "link:../node_modules/vue"
   }
 }
