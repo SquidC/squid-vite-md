@@ -52,9 +52,10 @@ import {
   ref,
   watchEffect,
   onMounted,
+  nextTick,
 } from "vue";
+import hljs from "highlight.js";
 import useRefTemplate from "../hooks/useRefTemplate";
-
 export default defineComponent({
   name: "DemoBlock",
   setup() {
@@ -81,21 +82,31 @@ export default defineComponent({
     });
     const codeAreaHeight = computed(() => {
       if (state.isMounted && state.isExpanded) {
-        const el = useRefTemplate<HTMLElement>(highlight);
-        const height = el.clientHeight + 20
-        return height+"px";
+        const descEl = useRefTemplate<HTMLElement>(description, true);
+        const hlEl = useRefTemplate<HTMLElement>(highlight);
+        const height =
+          (descEl ? descEl.clientHeight + 20 : 0) + hlEl.clientHeight + 20;
+        return height + "px";
       } else {
         return "1px";
       }
     });
     onMounted(() => {
       state.isMounted = true;
+      nextTick(() => {
+        try {
+          const hlEl = useRefTemplate<HTMLElement>(highlight) as HTMLElement;
+          const code = hlEl.querySelector("code") as HTMLElement;
+          hljs.highlightBlock(code);
+        } catch (error) {
+          console.log(error);
+        }
+      });
     });
     watchEffect(() => {
       if (state.isMounted) {
         if (state.isExpanded) {
           const el = useRefTemplate<HTMLElement>(meta);
-          console.log("展开:",codeAreaHeight.value);
           el.style.height = codeAreaHeight.value;
         } else {
           const el = useRefTemplate<HTMLElement>(meta);
@@ -170,8 +181,11 @@ export default defineComponent({
   }
 
   .highlight {
-    pre {
+    :deep(pre) {
       margin: 0;
+      .html {
+        padding: 18px;
+      }
     }
 
     code.hljs {

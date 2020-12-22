@@ -8,13 +8,13 @@ function pathResolve(dir: string) {
 const viteConfig: UserConfig = {
   port: 3050,
   alias: {
-    "/@/": pathResolve("."),
+    "/@/": pathResolve("./src/"),
   },
   plugins: [
     vueMd(),
   ],
   optimizeDeps: {
-    include: ["element-plus"],
+    include: ["element-plus","highlight.js"],
   },
 }
 
