@@ -1,6 +1,6 @@
 import { UserConfig } from "vite"
 import { resolve } from "path"
-import vueMd from "@squidc/vite-md"
+import vueMd from "../src/index"
 
 function pathResolve(dir: string) {
   return resolve(__dirname, dir)
@@ -14,7 +14,7 @@ const viteConfig: UserConfig = {
     vueMd(),
   ],
   optimizeDeps: {
-    include: ["element-plus","highlight.js"],
+    include: ["element-plus", "highlight.js"],
   },
 }
 

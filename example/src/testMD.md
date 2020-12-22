@@ -4,6 +4,7 @@
 
 
 :::demo 测试备注
+
 ```html
 <div>123</div>
 ```
@@ -21,10 +22,6 @@ asdasdsd
 >> aasdasda
 
 >>> 3333
-
-```js
-import aaa from "bbb"
-```
 
 
 

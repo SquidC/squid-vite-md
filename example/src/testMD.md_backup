@@ -1,0 +1,77 @@
+
+  <template>
+    <section class="content element-doc">
+    <h1>asdadsad</h1>
+<h2>aaa</h2>
+<demo-block>
+      <div><p>测试备注</p>
+</div>
+      <template #source><element-demo0 /></template>
+      <template #highlight><pre v-pre><code class="html">&lt;div&gt;123&lt;/div&gt;
+</code></pre></template></demo-block><p>asdasdsd</p>
+<table>
+<thead>
+<tr>
+<th>asdasda</th>
+<th>asdadad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>hello world</p>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>aasdasda</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>3333</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<p><code>hello</code></p>
+<p><em>hello</em></p>
+<p><strong>hello</strong></p>
+<p><a href="https://www.baidu.com/">aaaa</a></p>
+
+    </section>
+  </template>
+  <script lang="ts">
+      import * as Vue from 'vue';
+      export default {
+        name: 'component-doc',
+        components: {
+          "element-demo0": (function() {
+    
+    const { createVNode: _createVNode, openBlock: _openBlock, createBlock: _createBlock } = Vue
+
+const _hoisted_1 = /*#__PURE__*/_createVNode("div", null, "123", -1 /* HOISTED */)
+
+function render(_ctx, _cache) {
+  return (_openBlock(), _createBlock("div", null, [
+    _hoisted_1
+  ]))
+}
+  
+    const democomponentExport = {}
+    return {
+      render,
+      ...democomponentExport
+    }
+  })(),
+        }
+      }
+    </script>
