@@ -58,7 +58,7 @@ export function markdownComplier(path: string): string {
   // TODO: 优化这段逻辑
   let pageScript = "";
   if (componenetsString) {
-    pageScript = `<script lang="ts">
+    pageScript = `<script>
       import * as Vue from 'vue';
       export default {
         name: 'component-doc',
