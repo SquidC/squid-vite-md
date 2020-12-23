@@ -1,6 +1,6 @@
 {
   "name": "@squidc/vite-md",
-  "version": "0.5.10",
+  "version": "0.5.11",
   "description": "vite插件 markdown解析器",
   "main": "dist/index.js",
   "files": [
