@@ -1,6 +1,6 @@
 import { UserConfig } from "vite"
 import { resolve } from "path"
-import vueMd from "../src/index"
+import vueMd from "../src"
 import vuePlugins from "@vitejs/plugin-vue"
 
 function pathResolve(dir: string) {
@@ -12,11 +12,13 @@ const viteConfig: UserConfig = {
     "@": pathResolve("./src/"),
   },
   plugins: [
+    vuePlugins({
+      include: /\.(md|vue)$/
+    }),
     vueMd(),
-    vuePlugins(),
   ],
   optimizeDeps: {
-    include: ["element-plus", "highlight.js"],
+    include: ["highlight.js"],
   },
 }
 

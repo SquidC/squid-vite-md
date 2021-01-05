@@ -1,28 +1,35 @@
 import { Plugin } from "vite"
 import { markdownComplier } from "./markdown-complier"
 
+const MDMAP = /\.md$/
+
 export default function createVueMarkDownPlugin(): Plugin {
+
   return {
-    name: "vuedoc",
-    configureServer: (server) => {
-      const { app, moduleGraph } = server
-      app.use((req, res, next) => {
-        // console.log(req)
-      })
-      return
+    name: "vite-md-compiler",
+
+    handleHotUpdate: (ctx) => {
+      const { modules } = ctx
+      if(MDMAP.test(ctx.file)) {
+        return modules
+      }
+      return modules
     },
-    handleHotUpdate: () => {
-      return
-    },
+
     load(id) {
-      // 不是编译后的vue
-      if (id.indexOf("?vue") === -1) {
-        if (id.endsWith(".md")) {
-          const component = markdownComplier(id)
-          return component
+      console.log(id)
+      return null
+    },
+
+    transform(_, id) {
+      if (MDMAP.test(id)) {
+        const vueComponent = markdownComplier(id)
+
+        return {
+          code: vueComponent,
+          map: undefined
         }
       }
-      return null
     },
   }
 }
