@@ -1,17 +1,28 @@
 import { Plugin } from "vite"
-import { createBuildPlugin } from "./build"
-import { createServerPlugin } from "./server"
+import { markdownComplier } from "./markdown-complier"
 
 export default function createVueMarkDownPlugin(): Plugin {
   return {
-    configureServer: [createServerPlugin()],
-    // @ts-ignore
-    // 使用vue plugin 编译的文件
-    rollupPluginVueOptions: {
-      include: /\.(vue|md)$/
+    name: "vuedoc",
+    configureServer: (server) => {
+      const { app, moduleGraph } = server
+      app.use((req, res, next) => {
+        // console.log(req)
+      })
+      return
     },
-    rollupInputOptions: {
-      plugins: [createBuildPlugin()],
+    handleHotUpdate: () => {
+      return
+    },
+    load(id) {
+      // 不是编译后的vue
+      if (id.indexOf("?vue") === -1) {
+        if (id.endsWith(".md")) {
+          const component = markdownComplier(id)
+          return component
+        }
+      }
+      return null
     },
   }
 }
