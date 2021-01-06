@@ -88,24 +88,26 @@ export function genInlineComponentText(path: string, template: string, script: s
     })()`
   }
 
+  // 按照 element-demo${count} 分割script
+  let scripts = script.split("element-demo")
+  scripts.shift()
+  scripts = scripts.map(script => script.replace(/\d: ([\s\S]+),/, (s, s1)=> s1))
+
   // 总页面编译成js
-  demoComponentContent = demoComponentContent.replace(/_component_element_demo\d+ = (.*)/, (s, s1) => {
+  demoComponentContent = demoComponentContent.replace(/_component_element_demo\d+ = (.*)/g, (s, s1) => {
     // 组件名称
-    const componentName = s1.match(/_resolveComponent\(\"(.*)\"\)/)[1]!
-    const matchSFC = `${componentName}: \\([\\s\\S]+\\)`
-    const functionComponent = 
+    const componentName = s1.match(/_resolveComponent\(\"(.*)\"\)/)[1]
     // 引用vue代码
-    script.match(new RegExp(matchSFC))![0]
-      .replace(`${componentName}:`, "")
-      .replace(/import ({.*}) from ["']vue['"]/g, (s, s1) => {
-        if(s.includes("createVNode")){
-          // 结构没有as
-          s1 = s1.replace(/ as/g, ":")
+    const functionComponent = 
+      scripts[componentName.match(/\d+/)[0]!] // 匹配代码
+        .replace(/import ({.*}) from ["']vue['"]/g, (s, s1) => {
+          if(s.includes("createVNode")){
+            s1 = s1.replace(/ as/g, ":") // 结构没有as
+            return `const ${s1} = Vue`
+          }
+          // 代码块内部引用
           return `const ${s1} = Vue`
-        }
-        // 代码块内部引用
-        return `const ${s1} = Vue`
-      })
+        })
 
     return s.replace(s1, functionComponent)
   })

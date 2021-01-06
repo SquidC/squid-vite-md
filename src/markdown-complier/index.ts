@@ -55,24 +55,6 @@ export function markdownComplier(path: string): string {
     commentEnd = content.indexOf(endTag, commentStart + startTagLen);
   }
 
-  // 仅允许在 demo 不存在时，才可以在 Markdown 中写 script 标签
-  // let pageScript = "";
-  // if (componenetsString) {
-  //   pageScript = `<script>
-  //     import * as Vue from 'vue';
-  //     export default {
-  //       name: 'component-doc',
-  //       components: {
-  //         ${componenetsString}
-  //       }
-  //     }
-  //   </script>`;
-  // } else if (content.indexOf("<script>") === 0) {
-  //   // 硬编码，有待改善
-  //   start = content.indexOf("</script>") + "</script>".length;
-  //   pageScript = content.slice(0, start);
-  // }
-
   output.push(content.slice(start));
   const pageTemplate = `
   <template>
