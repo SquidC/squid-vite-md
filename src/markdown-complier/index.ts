@@ -39,14 +39,14 @@ export function markdownComplier(path: string): string {
       commentStart + startTagLen,
       commentEnd
     );
+    // 获取 <template> <script>
     const html = stripTemplate(commentContent);
     const script = stripScript(commentContent);
-    const demoComponentContent = genInlineComponentText(html, script);
+    const demoComponentContent = genInlineComponentText(path, html, script);
     const demoComponentName = `element-demo${id}`;
+    // 生成函数式组件 渲染代码块的组件
     output.push(`<template #source><${demoComponentName} /></template>`);
-    componenetsString += `${JSON.stringify(
-      demoComponentName
-    )}: ${demoComponentContent},`;
+    componenetsString += `${demoComponentName}: ${demoComponentContent},`;
 
     // 重新计算下一次的位置
     id++;
@@ -54,34 +54,31 @@ export function markdownComplier(path: string): string {
     commentStart = content.indexOf(startTag, start);
     commentEnd = content.indexOf(endTag, commentStart + startTagLen);
   }
+
   // 仅允许在 demo 不存在时，才可以在 Markdown 中写 script 标签
-  // TODO: 优化这段逻辑
-  let pageScript = "";
-  if (componenetsString) {
-    pageScript = `<script>
-      import * as Vue from 'vue';
-      export default {
-        name: 'component-doc',
-        components: {
-          ${componenetsString}
-        }
-      }
-    </script>`;
-  } else if (content.indexOf("<script>") === 0) {
-    // 硬编码，有待改善
-    start = content.indexOf("</script>") + "</script>".length;
-    pageScript = content.slice(0, start);
-  }
+  // let pageScript = "";
+  // if (componenetsString) {
+  //   pageScript = `<script>
+  //     import * as Vue from 'vue';
+  //     export default {
+  //       name: 'component-doc',
+  //       components: {
+  //         ${componenetsString}
+  //       }
+  //     }
+  //   </script>`;
+  // } else if (content.indexOf("<script>") === 0) {
+  //   // 硬编码，有待改善
+  //   start = content.indexOf("</script>") + "</script>".length;
+  //   pageScript = content.slice(0, start);
+  // }
 
   output.push(content.slice(start));
-  const result = `
+  const pageTemplate = `
   <template>
     <section class="content element-doc">
     ${output.join("")}
     </section>
-  </template>
-  ${pageScript}`;
-
-
-  return result
+  </template>`
+  return genInlineComponentText(path, pageTemplate, componenetsString, false)
 }

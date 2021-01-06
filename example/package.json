@@ -4,7 +4,7 @@
     "dev": "vite"
   },
   "devDependencies": {
-    "less": "^4.0.0",
+    "less": "link:../node_modules/less",
     "vite": "link:../node_modules/vite",
     "vue": "link:../node_modules/vue"
   },
