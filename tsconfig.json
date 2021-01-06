@@ -7,7 +7,7 @@
     "declaration": true,
     "removeComments": true,
     "esModuleInterop": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "strict": true,
     "noUnusedLocals": true,
     "jsx": "preserve",
@@ -15,7 +15,6 @@
     "lib": [
       "ESNext", "DOM"
     ],
-
     "allowSyntheticDefaultImports": true
   },
   "exclude": [
