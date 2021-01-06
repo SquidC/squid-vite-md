@@ -5,7 +5,7 @@ import "highlight.js/styles/vs2015.css"
 
 const app = createApp(App)
 
-app.component("DemoBlock", demoBlock);
+app.component("DemoBlock",demoBlock);
 app.mount("#app")
 
 export default app

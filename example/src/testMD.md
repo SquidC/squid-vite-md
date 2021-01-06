@@ -6,7 +6,31 @@
 :::demo 测试备注
 
 ```html
-<div>123</div>
+<template>
+    <div>123</div>
+    <h1>asadadasd</h1>
+    {{ state }}
+    <button @click="click">click</button>
+</template>
+<script>
+import { defineComponent, reactive } from "vue"
+export default defineComponent({
+  setup(){
+      const state = reactive({
+          count: 0
+      })
+
+      const click = () => {
+          state.count++;
+      }
+
+      return {
+          state,
+          click
+      }
+  }
+})
+</script>
 ```
 :::
 

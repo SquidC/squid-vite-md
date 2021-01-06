@@ -38,21 +38,19 @@ function pad(source: string) {
  */
 const templateReplaceRegex = /<template>([\s\S]+)<\/template>/g
 
-export function genInlineComponentText(template: string, script: string) {
+export function genInlineComponentText(path: string, template: string, script: string, fun=true) {
   // https://github.com/vuejs/vue-loader/blob/423b8341ab368c2117931e909e2da9af74503635/lib/loaders/templateLoader.js#L46
   let source = template
   if (templateReplaceRegex.test(source)) {
     source = source.replace(templateReplaceRegex, "$1")
   }
-  const finalOptions = {
+  const compiled = compileTemplate({
     source: `<div>${source}</div>`,
-    filename: "inline-component", // TODO：这里有待调整
-    id: "111111",
-    compilerOptions: {
-      mode: "function",
-    },
-  }
-  const compiled = compileTemplate(finalOptions as any)
+    filename: path,
+    id: path,
+    transformAssetUrls: false,
+  })
+  
   // tips
   if (compiled.tips && compiled.tips.length) {
     compiled.tips.forEach(tip => {
@@ -67,10 +65,8 @@ export function genInlineComponentText(template: string, script: string) {
         "\n",
     )
   }
-  let demoComponentContent = `
-    ${(compiled.code).replace("return function render","function render")}
-  `
-  // todo: 这里采用了硬编码有待改进
+  let demoComponentContent = compiled.code.replace("export function render", "function render")
+  
   script = script.trim()
   if (script) {
     script = script
@@ -79,13 +75,46 @@ export function genInlineComponentText(template: string, script: string) {
   } else {
     script = "const democomponentExport = {}"
   }
-  demoComponentContent = `(function() {
-    ${demoComponentContent}
-    ${script}
-    return {
-      render,
-      ...democomponentExport
-    }
-  })()`
-  return demoComponentContent
+
+  if(fun) {
+    // 函数式组件
+    return demoComponentContent = `(function() {
+      ${demoComponentContent}
+      ${script}
+      return {
+        render,
+        ...democomponentExport
+      }
+    })()`
+  }
+
+  // 总页面编译成js
+  demoComponentContent = demoComponentContent.replace(/_component_element_demo\d+ = (.*)/, (s, s1) => {
+    // 组件名称
+    const componentName = s1.match(/_resolveComponent\(\"(.*)\"\)/)[1]!
+    const matchSFC = `${componentName}: \\([\\s\\S]+\\)`
+    const functionComponent = 
+    // 引用vue代码
+    script.match(new RegExp(matchSFC))![0]
+      .replace(`${componentName}:`, "")
+      .replace(/import ({.*}) from ["']vue['"]/g, (s, s1) => {
+        if(s.includes("createVNode")){
+          // 结构没有as
+          s1 = s1.replace(/ as/g, ":")
+          return `const ${s1} = Vue`
+        }
+        // 代码块内部引用
+        return `const ${s1} = Vue`
+      })
+
+    return s.replace(s1, functionComponent)
+  })
+
+  // 返回渲染函数
+  return `
+  import * as Vue from 'vue';
+  ${demoComponentContent}
+  const __script = { render };
+  export default __script;
+  `
 }

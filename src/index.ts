@@ -1,35 +1,30 @@
 import { Plugin } from "vite"
 import { markdownComplier } from "./markdown-complier"
 
-const MDMAP = /\.md$/
+function parseId(id: string) {
+  const index = id.indexOf("?")
+  if (index < 0)
+    return id
+
+  else
+    return id.slice(0, index)
+}
 
 export default function createVueMarkDownPlugin(): Plugin {
 
   return {
     name: "vite-md-compiler",
-
-    handleHotUpdate: (ctx) => {
-      const { modules } = ctx
-      if(MDMAP.test(ctx.file)) {
-        return modules
+    enforce: "pre",
+    transform(raw, id) {
+      
+      const path = parseId(id)
+      if (!path.endsWith(".md")){
+        return raw
       }
-      return modules
-    },
+      const vueComponent = markdownComplier(path)
 
-    load(id) {
-      console.log(id)
-      return null
-    },
+      return vueComponent
 
-    transform(_, id) {
-      if (MDMAP.test(id)) {
-        const vueComponent = markdownComplier(id)
-
-        return {
-          code: vueComponent,
-          map: undefined
-        }
-      }
     },
   }
 }

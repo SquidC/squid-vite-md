@@ -12,9 +12,7 @@ const viteConfig: UserConfig = {
     "@": pathResolve("./src/"),
   },
   plugins: [
-    vuePlugins({
-      include: /\.(md|vue)$/
-    }),
+    vuePlugins(),
     vueMd(),
   ],
   optimizeDeps: {
