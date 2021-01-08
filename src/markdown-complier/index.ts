@@ -4,6 +4,7 @@ import md from "./create"
 import {
   genInlineComponentText,
   stripScript,
+  stripStyle,
   stripTemplate
 } from "./utils";
 
@@ -42,7 +43,8 @@ export function markdownComplier(path: string): string {
     // 获取 <template> <script>
     const html = stripTemplate(commentContent);
     const script = stripScript(commentContent);
-    const demoComponentContent = genInlineComponentText(path, html, script);
+    const style = stripStyle(commentContent);
+    const demoComponentContent = genInlineComponentText(path, html, script, style.code, style.lang, true);
     const demoComponentName = `element-demo${id}`;
     // 生成函数式组件 渲染代码块的组件
     output.push(`<template #source><${demoComponentName} /></template>`);
@@ -62,5 +64,5 @@ export function markdownComplier(path: string): string {
     ${output.join("")}
     </section>
   </template>`
-  return genInlineComponentText(path, pageTemplate, componenetsString, false)
+  return genInlineComponentText(path, pageTemplate, componenetsString)
 }

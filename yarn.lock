@@ -224,6 +224,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/hash-sum@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.npm.taobao.org/@types/hash-sum/download/@types/hash-sum-1.0.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fhash-sum%2Fdownload%2F%40types%2Fhash-sum-1.0.0.tgz#838f4e8627887d42b162d05f3d96ca636c2bc504"
+  integrity sha1-g49OhieIfUKxYtBfPZbKY2wrxQQ=
+
 "@types/highlight.js@^9.7.0":
   version "9.12.4"
   resolved "https://registry.npm.taobao.org/@types/highlight.js/download/@types/highlight.js-9.12.4.tgz#8c3496bd1b50cc04aeefd691140aa571d4dbfa34"

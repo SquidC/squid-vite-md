@@ -8,7 +8,7 @@
 
 ```html
 <template>
-    <div>123</div>
+    <div class="abc">123</div>
     <h1>789</h1>
     {{ state }}
     <button @click="click">click</button>
@@ -32,6 +32,11 @@ export default defineComponent({
   }
 })
 </script>
+<style>
+    .abc{
+        color: red;
+    }
+</style>
 ```
 :::
 
@@ -41,7 +46,7 @@ export default defineComponent({
 
 ```html
 <template>
-    <div>456</div>
+    <div class="abc">456</div>
     <h1>456</h1>
     {{ state }}
     <button @click="click">click</button>
@@ -65,6 +70,11 @@ export default defineComponent({
   }
 })
 </script>
+<style>
+    .abc{
+        color: green;
+    }
+</style>
 ```
 :::
 
@@ -74,8 +84,10 @@ export default defineComponent({
 
 ```html
 <template>
-    <div>789</div>
-    <h1>123</h1>
+    <div class="abc">
+        789
+        <h1>123</h1>
+    </div>
     {{ state }}
     <button @click="click">click</button>
 </template>
@@ -98,6 +110,14 @@ export default defineComponent({
   }
 })
 </script>
+<style lang="less">
+    .abc {
+        color: #0088ff;
+        h1 {
+            color: red;
+        }
+    }
+</style>
 ```
 :::
 
