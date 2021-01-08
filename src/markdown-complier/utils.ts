@@ -102,7 +102,6 @@ export function genInlineComponentText(
       scoped: true,
       preprocessLang: styleLang,
     })
-    console.log("compiledStyle", compiledStyle.code)
     style = [
       `const id = "${path}?scope=${scopeId}"`,
       `import.meta.hot = createHotContext(id);`,
