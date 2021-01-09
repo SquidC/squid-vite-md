@@ -48,20 +48,40 @@ function pad(source: string) {
  */
 const templateReplaceRegex = /<template>([\s\S]+)<\/template>/g
 
-export function genInlineComponentText(
+
+function _compileStyle(
   path: string,
-  template: string,
-  script: string,
-  style: string = "",
-  styleLang?: PreprocessLang,
-  fun = false ) {
+  scopeId: string,
+  style: string,
+  styleLang?: PreprocessLang
+) {
+  if (style) {
+    const compiledStyle = compileStyle({
+      source: style!,
+      filename: path,
+      id: scopeId+"-s",
+      scoped: true,
+      preprocessLang: styleLang,
+    })
+    style = [
+      `const id = "${path}?scope=${scopeId}"`,
+      `import.meta.hot = createHotContext(id);`,
+      `const css = ${JSON.stringify(compiledStyle.code)}`,
+      `updateStyle(id, css)`,
+      `import.meta.hot.accept()`,
+      `import.meta.hot.prune(() => removeStyle(id))`
+    ].join("\n")
+  }
+  return style
+}
+
+function _compileTemplate(path: string, source: string) {
   // https://github.com/vuejs/vue-loader/blob/423b8341ab368c2117931e909e2da9af74503635/lib/loaders/templateLoader.js#L46
-  let source = template
   if (templateReplaceRegex.test(source)) {
     source = source.replace(templateReplaceRegex, "$1")
   }
   const compiled = compileTemplate({
-    source: `<div>${source}</div>`,
+    source: source,
     filename: path,
     id: path,
     transformAssetUrls: false,
@@ -81,8 +101,12 @@ export function genInlineComponentText(
         "\n",
     )
   }
-  let demoComponentContent = compiled.code.replace("export function render", "function render")
-  
+
+  let template = compiled.code.replace("export function render", "function render")
+  return template
+}
+
+function _compileScript(path: string, script: string) {
   script = script.trim()
   if (script) {
     script = script
@@ -91,31 +115,26 @@ export function genInlineComponentText(
   } else {
     script = "const democomponentExport = {}"
   }
+  return script
+}
 
-  // 代码块发生变化就重新渲染css
+export function genInlineComponentText(
+  path: string,
+  template: string,
+  script: string,
+  style: string = "",
+  styleLang?: PreprocessLang,
+  genFun = false ) {
+    
   const scopeId = hash(path+template+script+style)
-  if (style) {
-    const compiledStyle = compileStyle({
-      source: style!,
-      filename: path,
-      id: scopeId+"-s",
-      scoped: true,
-      preprocessLang: styleLang,
-    })
-    style = [
-      `const id = "${path}?scope=${scopeId}"`,
-      `import.meta.hot = createHotContext(id);`,
-      `const css = ${JSON.stringify(compiledStyle.code)}`,
-      `updateStyle(id, css)`,
-      `import.meta.hot.accept()`,
-      `import.meta.hot.prune(() => removeStyle(id))`
-    ].join("\n")
-  }
+  template = _compileTemplate(path, template)
+  style = _compileStyle(path, scopeId, style, styleLang)
+  script = _compileScript(path, script)
 
-  if(fun) {
+  if(genFun) {
     // 函数式组件
-    return demoComponentContent = `(function() {
-      ${demoComponentContent}
+    return template = `(function() {
+      ${template}
       ${script}
       ${style}
       return {
@@ -132,7 +151,7 @@ export function genInlineComponentText(
   scripts = scripts.map(script => script.replace(/\d: ([\s\S]+),/, (s, s1)=> s1))
 
   // 总页面编译成js
-  demoComponentContent = demoComponentContent.replace(/_component_element_demo\d+ = (.*)/g, (s, s1) => {
+  template = template.replace(/_component_element_demo\d+ = (.*)/g, (s, s1) => {
     // 组件名称
     const componentName = s1.match(/_resolveComponent\(\"(.*)\"\)/)[1]
     // 引用vue代码
@@ -154,7 +173,7 @@ export function genInlineComponentText(
   return [
     `import { updateStyle, removeStyle } from "/@vite/client";`,
     `import * as Vue from 'vue';`,
-    `${demoComponentContent}`,
+    `${template}`,
     `const __script = { render };`,
     `export default __script;`
   ].join("\n")
