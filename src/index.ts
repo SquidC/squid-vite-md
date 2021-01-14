@@ -1,4 +1,4 @@
-import { Plugin } from "vite"
+import { Plugin, ViteDevServer } from "vite"
 import { markdownComplier } from "./markdown-complier"
 
 function parseId(id: string) {
@@ -10,19 +10,27 @@ function parseId(id: string) {
     return id.slice(0, index)
 }
 
-export default function createVueMarkDownPlugin(): Plugin {
+export interface Options {
+  devServer?: ViteDevServer;
+}
 
+export default function createVueMarkDownPlugin(): Plugin {
+  let options: Options = {
+    devServer: undefined
+  }
   return {
     name: "vite-md-compiler",
-    enforce: "pre",
+    configureServer(server) {
+      if(server) {
+        options.devServer = server
+      }
+    },
     transform(raw, id) {
-      
       const path = parseId(id)
       if (!path.endsWith(".md")){
         return raw
       }
-      const vueComponent = markdownComplier(path)
-
+      const vueComponent = markdownComplier(path, options)
       return vueComponent
 
     },

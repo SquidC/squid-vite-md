@@ -1,5 +1,6 @@
 import { compileStyle, compileTemplate } from "@vue/compiler-sfc" 
 import hash from "hash-sum"
+import { Options } from ".."
 
 type PreprocessLang = "less" | "sass" | "scss" | "styl" | "stylus";
 
@@ -51,10 +52,13 @@ const templateReplaceRegex = /<template>([\s\S]+)<\/template>/g
 
 function _compileStyle(
   path: string,
+  opts: Options,
   scopeId: string,
   style: string,
   styleLang?: PreprocessLang
 ) {
+  const { devServer } = opts
+
   if (style) {
     const compiledStyle = compileStyle({
       source: style!,
@@ -63,14 +67,23 @@ function _compileStyle(
       scoped: true,
       preprocessLang: styleLang,
     })
-    style = [
-      `const id = "${path}?scope=${scopeId}"`,
-      `import.meta.hot = createHotContext(id);`,
-      `const css = ${JSON.stringify(compiledStyle.code)}`,
-      `updateStyle(id, css)`,
-      `import.meta.hot.accept()`,
-      `import.meta.hot.prune(() => removeStyle(id))`
-    ].join("\n")
+    if(devServer) {
+      style = [
+        `const id = "${path}?scope=${scopeId}"`,
+        `import.meta.hot = __vite__createHotContext(id);`,
+        `const css = ${JSON.stringify(compiledStyle.code)}`,
+        `updateStyle(id, css)`,
+        `import.meta.hot.accept()`,
+        `import.meta.hot.prune(() => removeStyle(id))`
+      ].join("\n")
+    } else {
+      style = [
+        `let e=document.createElement("style");`,
+        `const css = ${JSON.stringify(compiledStyle.code)}`,
+        `e.innerHTML=css`,
+        `document.head.appendChild(e);`,
+      ].join("\n")
+    }
   }
   return style
 }
@@ -120,15 +133,18 @@ function _compileScript(path: string, script: string) {
 
 export function genInlineComponentText(
   path: string,
+  opts: Options,
   template: string,
   script: string,
   style: string = "",
   styleLang?: PreprocessLang,
   genFun = false ) {
+
+  const { devServer } = opts
     
   const scopeId = hash(path+template+script+style)
   template = _compileTemplate(path, template)
-  style = _compileStyle(path, scopeId, style, styleLang)
+  style = _compileStyle(path, opts, scopeId, style, styleLang)
   script = _compileScript(path, script)
 
   if(genFun) {
@@ -168,10 +184,9 @@ export function genInlineComponentText(
 
     return s.replace(s1, functionComponent)
   })
-
   // 返回渲染函数
   return [
-    `import { updateStyle, removeStyle } from "/@vite/client";`,
+    devServer && `import { updateStyle, removeStyle } from "/@vite/client";`,
     `import * as Vue from 'vue';`,
     `${template}`,
     `const __script = { render };`,

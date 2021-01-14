@@ -1,5 +1,6 @@
 
 import fs from "fs-extra"
+import { Options } from "../";
 import md from "./create"
 import {
   genInlineComponentText,
@@ -13,7 +14,7 @@ import {
  * @param path md文件路径
  * @returns 返回处理后的md文件内容
  */
-export function markdownComplier(path: string): string {
+export function markdownComplier(path: string, opts: Options): string {
   const fileContent = fs.readFileSync(path).toString()
   // markdown-it编译成html
   // 实例代码做了两个处理
@@ -44,7 +45,7 @@ export function markdownComplier(path: string): string {
     const html = stripTemplate(commentContent);
     const script = stripScript(commentContent);
     const style = stripStyle(commentContent);
-    const demoComponentContent = genInlineComponentText(path, html, script, style.code, style.lang, true);
+    const demoComponentContent = genInlineComponentText(path, opts, html, script, style.code, style.lang, true);
     const demoComponentName = `element-demo${id}`;
     // 生成函数式组件 渲染代码块的组件
     output.push(`<template #source><${demoComponentName} /></template>`);
@@ -64,5 +65,5 @@ export function markdownComplier(path: string): string {
     ${output.join("")}
     </section>
   </template>`
-  return genInlineComponentText(path, pageTemplate, componenetsString)
+  return genInlineComponentText(path, opts, pageTemplate, componenetsString)
 }
