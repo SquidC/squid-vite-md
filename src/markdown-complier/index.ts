@@ -7,7 +7,7 @@ import {
   stripScript,
   stripStyle,
   stripTemplate
-} from "./utils";
+} from "./compileVue";
 
 /**
  * markdown 解析器 输入md文件路径 解释成demo-vue组件 生成.vue

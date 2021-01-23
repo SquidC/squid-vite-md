@@ -51,7 +51,7 @@ interface imports {
 function getImport(code: string): imports {
   // 提取import
   const imports: Record<string, Array<string>> = {}
-  code = code.replace(/import {(.*)} from ['"](.*)['"];?/g, (s, s1, s2) => {
+  code = code.replace(/import {(.*)} from ['"](.*)['"]+?[;\n\s]/g, (s, s1, s2) => {
     const pkgs = s1.split(",").map((s: string) => s.trim());
     if(imports[s2]){
       imports[s2] = imports[s2].concat(pkgs)
@@ -164,7 +164,6 @@ function _compileScript(path: string, script: string) {
   if (script) {
     script = script
       .replace(/export\s+default/, "const democomponentExport =")
-      .replace(/import ({.*}) from 'vue'/g, (s, s1) => `const ${s1} = Vue`)
   } else {
     script = "const democomponentExport = {}"
   }
@@ -212,6 +211,7 @@ export function genInlineComponentText(
     const componentName = s1.match(/_resolveComponent\(\"(.*)\"\)/)[1]
     // 引用vue代码
     const functionComponent = scripts[componentName.match(/\d+/)[0]!] // 匹配代码
+
     return s.replace(s1, functionComponent)
   })
   const compileTemplate = getImport(template)
