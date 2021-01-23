@@ -37,6 +37,46 @@ export function stripTemplate(content: string):string {
   return content.replace(/<(script|style)[\s\S]+<\/\1>/g, "").trim()
 }
 
+/**
+ * 导入包
+*/
+interface imports {
+  code: string;
+  imports: Record<string, Array<string>>;
+}
+
+/** 
+ * 获取导入包并删除原来代码中的导入包
+*/
+function getImport(code: string): imports {
+  // 提取import
+  const imports: Record<string, Array<string>> = {}
+  code = code.replace(/import {(.*)} from ['"](.*)['"];?/g, (s, s1, s2) => {
+    const pkgs = s1.split(",").map((s: string) => s.trim());
+    if(imports[s2]){
+      imports[s2] = imports[s2].concat(pkgs)
+    } else {
+      imports[s2] = pkgs
+    }
+    return ""
+  })
+  return {
+    code,
+    imports,
+  }
+}
+
+/**
+ * 合并导入包
+*/
+function rewriteImports(imports: imports["imports"]) {
+  return Object.keys(imports).map(k => {
+    const pkg = Array.from(new Set(imports[k])).join(", ")
+    return `import {${pkg}} from "${k}";`
+  }).join("\n")
+}
+
+
 function pad(source: string) {
   return source
     .split(/\r?\n/)
@@ -171,24 +211,15 @@ export function genInlineComponentText(
     // 组件名称
     const componentName = s1.match(/_resolveComponent\(\"(.*)\"\)/)[1]
     // 引用vue代码
-    const functionComponent = 
-      scripts[componentName.match(/\d+/)[0]!] // 匹配代码
-        .replace(/import ({.*}) from ["']vue['"]/g, (s, s1) => {
-          if(s.includes("createVNode")){
-            s1 = s1.replace(/ as/g, ":") // 结构没有as
-            return `const ${s1} = Vue`
-          }
-          // 代码块内部引用
-          return `const ${s1} = Vue`
-        })
-
+    const functionComponent = scripts[componentName.match(/\d+/)[0]!] // 匹配代码
     return s.replace(s1, functionComponent)
   })
+  const compileTemplate = getImport(template)
   // 返回渲染函数
   return [
     devServer && `import { updateStyle, removeStyle } from "/@vite/client";`,
-    `import * as Vue from 'vue';`,
-    `${template}`,
+    `${rewriteImports(compileTemplate.imports)}`,
+    compileTemplate.code,
     `const __script = { render };`,
     `export default __script;`
   ].join("\n")
